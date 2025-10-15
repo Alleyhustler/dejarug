@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DejaRug - Echoes of the Forgotten</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            backgr;
+            color: #e0e0e0;
+        }
+
+        /* Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('sdd.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            opacity: 0.75;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(214, 224, 177, 0.4) 0%, rgba(10,10,10,0.75) 100%);
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Logo */
+        .logo-container {
+            position: absolute;
+            top: 30px;
+            width: 400px;
+            left: 48.4%;
+            transform: translateX(-50%);
+            z-index: 100;
+            animation: fadeInLogo 2s ease-out;
+        }
+
+        .logo {
+            width: 400px;
+            height: 400px;
+            background-image: url('ss.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            filter: drop-shadow(0 0 30px rgba(1, 128, 12, 0.4));
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            width: 100%;
+            max-width: 1600px;
+            height: calc(100vh - 180px);
+            align-items: center;
+        }
+
+        /* Left Column - Title & Lore */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 50px;
+            overflow-y: auto;
+            padding-right: 30px;
+            max-height: 100%;
+        }
+
+        .left-column::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .left-column::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .left-column::-webkit-scrollbar-thumb {
+            background: rgba(178, 248, 121, 0.3);
+            border-radius: 3px;
+        }
+
+        /* Title Section */
+        .title-block {
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0d8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #e2ffa0;
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+
+        /* Lore Block */
+        .lore-block {
+            animation: fadeInUp 1.8s ease-out;
+            padding: 30px;
+            border-left: 2px solid rgba(255, 238, 0, 0.3);
+            background: linear-gradient(135deg, rgba(199, 221, 180, 0.5) 0%, transparent 100%);
+            border-radius: 4px;
+        }
+
+        .lore-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .lore-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #000000;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+        }
+        .pulse-indicator {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(0, 200, 255, 0);
+            border-radius: 50%;
+        }
+        /* What Is Block */
+        .what-block {
+            animation: fadeIn 2s ease-out;
+            padding: 30px;
+            border-left: 2px solid rgba(179, 255, 0, 0.3);
+            background: linear-gradient(135deg, rgba(199, 221, 180, 0.5) 0%, transparent 100%);
+            border-radius: 4px;
+        }
+
+        .what-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .what-paragraph {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #131212;
+            font-weight: 300;
+            margin-bottom: 12px;
+        }
+
+        .what-paragraph:last-child {
+            margin-bottom: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.3), transparent);
+            margin: 15px 0;
+        }
+
+        /* Right Column - Gallery */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+            height: 100%;
+        }
+
+        .gallery-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #ffffff;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            height: 100%;
+            min-height: 200px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.6s ease-out, filter 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 40px rgba(0, 200, 255, 0.5));
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, transparent, rgba(10, 10, 10, 0.95));
+            padding: 25px 15px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #a0d8ff;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 200, 255, 0.2);
+            border: 2px solid rgba(0, 200, 255, 0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(0, 200, 255, 0.4);
+            border-color: rgba(0, 200, 255, 0.8);
+        }
+
+        .sound-toggle.muted {
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeInLogo {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(0, 200, 255, 0.6));
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes breathePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(0, 200, 255, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(0, 200, 255, 0);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                height: auto;
+            }
+
+            .left-column {
+                padding-right: 0;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                min-height: 400px;
+            }
+
+            .container {
+                height: auto;
+                min-height: 100vh;
+                padding: 100px 30px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+
+            .logo-container {
+                top: 20px;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 80px 20px 60px;
+            }
+
+            .left-column {
+                gap: 35px;
+            }
+
+            .lore-block,
+            .what-block {
+                padding: 20px;
+            }
+
+            .sound-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <div class="logo-container">
+        <div class="logo"></div>
+    </div>
+
+    <div class="container">
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Title Block -->
+                <div class="title-block">
+                    <h1 class="main-title">DEJARUG</h1>
+                    <p class="subtitle">You've seen this before. You'll see it again.</p>
+                    <div class="pulse-indicator"></div>
+                </div>
+
+                <!-- Lore Block -->
+                <div class="lore-block">
+                    <h2 class="lore-title">The Lore</h2>
+                    <p class="lore-text">
+                        In the ruins of forgotten chains, we found fragments of every rug that ever was.<br><br>
+                        The loops repeat. The ghosts remember. And once again… they pull.
+                    </p>
+                </div>
+
+                <!-- What Is Block -->
+                <div class="what-block">
+                    <h2 class="what-title">What Is DejaRug?</h2>
+                    <p class="what-paragraph">
+                        DejaRug is an interactive digital memorial—a mournful archive of every project that ever rug-pulled, looping eternally across the blockchain's shattered dreams.
+                    </p>
+                    <div class="divider"></div>
+                    <p class="what-paragraph">
+                        We do not judge. We remember. The rugs return endlessly, their patterns forever woven into the fabric of our collective history. Here, in this hallowed space, they live on—not as warnings, but as monuments to the cycle that never ends.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column - Gallery -->
+            <div class="right-column">
+                <h2 class="gallery-title">Echoes of the Rugs</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <div class="gallery-image" style="--bg-image: url('a.png')"></div>
+                        <div class="gallery-caption">The First Pull</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-image" style="--bg-image: url('b.png')"></div>
+                        <div class="gallery-caption">The Forgotten Floor</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-image" style="--bg-image: url('c.png')"></div>
+                        <div class="gallery-caption">The Re-Rug</div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-image" style="--bg-image: url('d.png')"></div>
+                        <div class="gallery-caption">The Loop</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <div class="sound-toggle" id="soundToggle" title="Toggle ambient sound">🔊</div>
+
+    <script>
+        // Load background and logo images
+        async function loadImages() {
+            try {
+                // Load background
+                const bgData = await window.fs.readFile('background.png');
+                const bgBlob = new Blob([bgData], { type: 'image/png' });
+                const bgUrl = URL.createObjectURL(bgBlob);
+                document.querySelector('.background').style.backgroundImage = `url('${bgUrl}')`;
+
+                // Load logo
+                const logoData = await window.fs.readFile('logo.png');
+                const logoBlob = new Blob([logoData], { type: 'image/png' });
+                const logoUrl = URL.createObjectURL(logoBlob);
+                document.querySelector('.logo').style.backgroundImage = `url('${logoUrl}')`;
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        loadImages();
+
+        // Ambient sound
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let oscillator, gainNode, noiseNode, noiseGain;
+        let soundActive = false;
+
+        function initAudio() {
+            gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
+            // Filtered wind/ambient sound
+            const filterFreq = audioContext.createBiquadFilter();
+            filterFreq.type = 'lowpass';
+            filterFreq.frequency.setValueAtTime(800, audioContext.currentTime);
+            filterFreq.connect(gainNode);
+
+            oscillator = audioContext.createOscillator();
+            oscillator.frequency.setValueAtTime(40, audioContext.currentTime);
+            oscillator.type = 'sine';
+            oscillator.connect(filterFreq);
+            oscillator.start();
+
+            // Noise layer
+            const bufferSize = 2 * audioContext.sampleRate;
+            const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            noiseNode = audioContext.createBufferSource();
+            noiseNode.buffer = noiseBuffer;
+            noiseNode.loop = true;
+
+            noiseGain = audioContext.createGain();
+            noiseGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+            noiseNode.connect(noiseGain);
+            noiseGain.connect(filterFreq);
+            noiseNode.start();
+        }
+
+        function toggleSound() {
+            if (!oscillator) initAudio();
+
+            soundActive = !soundActive;
+            const toggle = document.getElementById('soundToggle');
+
+            if (soundActive) {
+                gainNode.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.5);
+                toggle.classList.remove('muted');
+            } else {
+                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+                toggle.classList.add('muted');
+            }
+        }
+
+        document.getElementById('soundToggle').addEventListener('click', toggleSound);
+    </script>
+</body>
+</html>
